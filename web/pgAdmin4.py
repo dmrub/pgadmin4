@@ -22,6 +22,7 @@ if sys.path[0] != root:
 
 import config
 from pgadmin import create_app
+from flask_reverse_proxy import ReverseProxied
 
 # Get the config database schema version. We store this in pgadmin.model
 # as it turns out that putting it in the config files isn't a great idea
@@ -44,6 +45,7 @@ if not os.path.isfile(config.SQLITE_PATH):
 
 # Create the app!
 app = create_app()
+app.wsgi_app = ReverseProxied(app.wsgi_app)
 
 if config.DEBUG:
     app.debug = True
